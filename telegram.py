@@ -1,12 +1,25 @@
 # from telegram import Updater, CommandHandler
 import telebot
 import json
+import os
+
+from pathlib import Path
+from dotenv import load_dotenv
 
 from telebot import types
 from telebot import apihelper
 
 from airtable import Airtable
 
+
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)
+
+AIR_TABLE_API_KEY = os.getenv("AIR_TABLE_API_KEY")
+AIR_TABLE_BASE_KEY = os.getenv("AIR_TABLE_BASE_KEY")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+
+print(AIR_TABLE_API_KEY, AIR_TABLE_BASE_KEY, TELEGRAM_BOT_TOKEN)
 # apihelper.proxy = {'https': 'socks5://150399599:R6y5CH1S@ss-01.s5.ynvv.cc:999'}
 
 # bot = telebot.TeleBot("927990044:AAGTf7reZwctIVnysUviPieXm84CPAUC_zU")
@@ -16,6 +29,12 @@ from airtable import Airtable
 #     text="Поехали", callback_data="test")
 # keyboard.add(callback_button)
 # bot.send_message('150399599', 'Dimk_smith', reply_markup=keyboard)
+
+
+def get_data_from_env(data_name):
+    env_path = Path('.') / '.env'
+    load_dotenv(dotenv_path=env_path)
+    return getenv(data_name)
 
 
 def send_telegram_message():
@@ -40,7 +59,7 @@ def send_telegram_message():
     apihelper.proxy = {
         'https': 'socks5://150399599:R6y5CH1S@ss-01.s5.ynvv.cc:999'}
 
-    bot = telebot.TeleBot("927990044:AAGTf7reZwctIVnysUviPieXm84CPAUC_zU")
+    bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
     keyboard = types.InlineKeyboardMarkup()
 
     callback_button = types.InlineKeyboardButton(
@@ -51,11 +70,15 @@ def send_telegram_message():
 
 
 def write_to_airtable():
-    base_key = 'appNPoAJOyctb4MId'
-    table_name = 'Test'
-    airtable = Airtable(base_key, table_name, api_key='keyWMHvL8W3PuvyfJ')
+    table_name = 'Test_Airtable'
+    with open('/tmp/temp.json') as f:
+        data_set = json.load(f)
+    print(data_set)
+    airtable = Airtable(AIR_TABLE_BASE_KEY, table_name,
+                        api_key=AIR_TABLE_API_KEY)
     # api_key=os.environ['AIRTABLE_KEY'])
     records = airtable.get_all()
+    # airtable.insert({'Name': 'Brian'})
 
     print(records)
 

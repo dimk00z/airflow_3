@@ -8,5 +8,6 @@ more_itertools==8.3.0
 psycopg2==2.8.5
 cryptography==2.9.2
 pyTelegramBotAPI==3.7.1
+python-dotenv==0.13.0
 airtable-python-wrapper==0.13.0
 apache-airflow==1.10.10
