@@ -21,8 +21,6 @@ load_dotenv(dotenv_path=env_path)
 
 AIR_TABLE_API_KEY = os.getenv("AIR_TABLE_API_KEY")
 AIR_TABLE_BASE_KEY = os.getenv("AIR_TABLE_BASE_KEY")
-#TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-#TELEGRAM_PROXY = os.getenv("TELEGRAM_PROXY")
 
 
 def get_data_from_env(data_name):
@@ -53,7 +51,7 @@ class TelegramOperator(BaseOperator):
             if call.message:
                 if call.data == "test":
                     bot.edit_message_text(
-                        chat_id=call.message.chat.id, message_id=call.message.message_id, text="Спасибо")
+                        chat_id=call.message.chat.id, message_id=call.message.message_id, text="Двинули!")
                     print(call)
                     result_data_set = {
                         'chat_id': str(call.message.chat.id),

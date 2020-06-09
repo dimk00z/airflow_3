@@ -87,6 +87,8 @@ class FileCheckSensor(BaseSensorOperator):
 default_args = {
     'owner': 'Dimk_smith',
     'start_date': days_ago(2),
+    'chat_id_for_send': '-496351002',
+
     'filename': '/tmp/temp.json'}
 
 dag = DAG(dag_id='telegram_listener',
