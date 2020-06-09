@@ -51,7 +51,7 @@ class TelegramOperator(BaseOperator):
                     bot.edit_message_text(
                         chat_id=call.message.chat.id,
                         message_id=call.message.message_id,
-                        text="Спасибо")
+                        text="Двинули!")
                     result_data_set = {
                         'chat_id': str(call.message.chat.id),
                         'username': call.from_user.username,
