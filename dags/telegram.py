@@ -19,10 +19,6 @@ from airflow.utils.dates import days_ago
 from airflow.operators.dummy_operator import DummyOperator
 
 
-AIR_TABLE_API_KEY = os.getenv("AIR_TABLE_API_KEY")
-AIR_TABLE_BASE_KEY = os.getenv("AIR_TABLE_BASE_KEY")
-
-
 class TelegramOperator(BaseOperator):
     @apply_defaults
     def __init__(self, filename: str,
@@ -64,14 +60,14 @@ class TelegramOperator(BaseOperator):
                     with open(self.filename, 'w', encoding='utf-8') as outfile:
                         json.dump(result_data_set, outfile)
                     bot.stop_polling()
-                    print('Бот отработал')
 
         keyboard = types.InlineKeyboardMarkup()
         callback_button = types.InlineKeyboardButton(
             text="Поехали", callback_data="test")
         keyboard.add(callback_button)
         bot.send_message(self.chat_id_for_send,
-                         'Карантин закончился, может в бар?', reply_markup=keyboard)
+                         'Карантин закончился, может в бар?',
+                         reply_markup=keyboard)
         bot.polling()
 
 
@@ -114,7 +110,7 @@ default_args = {
 
     # prod
     'chat_id_for_send': '-496351002',
-    'air_table': 'airflow101',
+    'air_table': 'tg_actions',
 
     'filename': '/tmp/temp.json'}
 
