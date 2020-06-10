@@ -19,7 +19,9 @@ class TelegramOperator(BaseOperator):
     @apply_defaults
     def __init__(self, filename: str,
                  chat_id_for_send: str,
-                 use_proxy=True, *args, **kwargs):
+                 use_proxy=True,
+                 env_path=Path('.') / '.env',
+                 *args, **kwargs):
         super().__init__(*args, **kwargs)
         env_path = Path('.') / '.env'
         load_dotenv(dotenv_path=env_path)
@@ -79,9 +81,8 @@ class FileCheckSensor(BaseSensorOperator):
 
 class AirtableOperator(BaseOperator):
     @apply_defaults
-    def __init__(self, air_table: str, filename: str, *args, **kwargs):
+    def __init__(self, air_table: str, filename: str, env_path=Path('.') / '.env',   *args, **kwargs):
         super().__init__(*args, **kwargs)
-        env_path = Path('.') / '.env'
         load_dotenv(dotenv_path=env_path)
         self.api_key = os.getenv("AIR_TABLE_API_KEY")
         self.base_key = os.getenv("AIR_TABLE_BASE_KEY")
@@ -107,6 +108,7 @@ default_args = {
     # prod
     # 'chat_id_for_send': '-496351002',
     # 'air_table': 'tg_actions',
+    # 'env_path': '/home/dimk/airflow/.env',
 
     'filename': '/tmp/temp.json'}
 
