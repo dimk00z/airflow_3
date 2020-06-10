@@ -51,7 +51,7 @@ class TelegramOperator(BaseOperator):
                         'triggered_at': datetime.fromtimestamp(
                             int(call.message.date)).strftime("%Y-%m-%dT%H:%M:%SZ"),
                         'reporter_name': 'dimk_smith',
-                        'event_type': new_message
+                        'event_type': call.from_user.__str__()
                     }
                     with open(self.filename, 'w', encoding='utf-8') as outfile:
                         json.dump(result_data_set, outfile)
@@ -101,12 +101,12 @@ default_args = {
     'owner': 'Dimk_smith',
     'start_date': days_ago(2),
     # test
-    # 'chat_id_for_send': '150399599',
-    # 'air_table': 'air_table',
+    'chat_id_for_send': '150399599',
+    'air_table': 'air_table',
 
     # prod
-    'chat_id_for_send': '-496351002',
-    'air_table': 'tg_actions',
+    # 'chat_id_for_send': '-496351002',
+    # 'air_table': 'tg_actions',
 
     'filename': '/tmp/temp.json'}
 

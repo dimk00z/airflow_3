@@ -53,16 +53,13 @@ class TelegramOperator():
                 if call.data == "test":
                     bot.edit_message_text(
                         chat_id=call.message.chat.id, message_id=call.message.message_id, text="Двинули!")
-                    print(dir(call))
-                    print(call.from_user)
-                    print(call.message.chat)
                     result_data_set = {
                         'chat_id': str(call.message.chat.id),
                         'username': call.from_user.username,
                         'triggered_at': datetime.utcfromtimestamp(
                             int(call.message.date)).strftime("%Y-%m-%dT%H:%M:%SZ"),
                         'reporter_name': 'dimk_smith',
-                        'event_type': 'event_type'
+                        'event_type': call.from_user.__str__()
                     }
                     with open('/tmp/temp.json', 'w') as outfile:
                         json.dump(result_data_set, outfile)
@@ -81,7 +78,6 @@ class TelegramOperator():
 def send_telegram_message():
     apihelper.proxy = {
         'https': TELEGRAM_PROXY}
-
     bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
     @bot.callback_query_handler(func=lambda call: True)
@@ -103,9 +99,7 @@ def send_telegram_message():
                     json.dump(result_data_set, outfile)
                 bot.stop_polling()
                 print('Бот отработал')
-
     keyboard = types.InlineKeyboardMarkup()
-
     callback_button = types.InlineKeyboardButton(
         text="Поехали", callback_data="test")
     keyboard.add(callback_button)
