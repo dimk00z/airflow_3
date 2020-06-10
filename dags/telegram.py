@@ -3,14 +3,10 @@ import telebot
 import json
 import os
 from datetime import datetime
-
 from pathlib import Path
 from dotenv import load_dotenv
-
 from telebot import types, apihelper
-
 from airtable import Airtable
-
 from airflow.models import DAG
 from airflow.models.baseoperator import BaseOperator
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
