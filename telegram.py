@@ -29,12 +29,13 @@ def get_data_from_env(data_name):
     return getenv(data_name)
 
 
-class TelegramOperator(BaseOperator):
-    @apply_defaults
+# class TelegramOperator(BaseOperator):
+class TelegramOperator():
+    # @apply_defaults
     def __init__(self, data_set_file_name='/tmp/temp.json',
                  chat_id_for_send='150399599', use_proxy=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.token = os.getenv("TELEGRAM_BOT_TOKEN")
+        self.token = os.getenv("TELEGRAM_BOT_TOKEN_")
         self.use_proxy = use_proxy
         self.chat_id_for_send = chat_id_for_send
         if use_proxy:
@@ -52,7 +53,9 @@ class TelegramOperator(BaseOperator):
                 if call.data == "test":
                     bot.edit_message_text(
                         chat_id=call.message.chat.id, message_id=call.message.message_id, text="Двинули!")
-                    print(call)
+                    print(dir(call))
+                    print(call.from_user)
+                    print(call.message.chat)
                     result_data_set = {
                         'chat_id': str(call.message.chat.id),
                         'username': call.from_user.username,
@@ -122,6 +125,7 @@ def write_to_airtable():
 
 if __name__ == '__main__':
     telegramOperator = TelegramOperator()
+    telegramOperator.execute()
     print(telegramOperator)
     # send_telegram_message()
     # write_to_airtable()
