@@ -23,7 +23,6 @@ class TelegramOperator(BaseOperator):
                  env_path=Path('.') / '.env',
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
-        env_path = Path('.') / '.env'
         load_dotenv(dotenv_path=env_path)
         self.token = os.getenv("TELEGRAM_BOT_TOKEN")
         self.filename = filename
@@ -81,7 +80,10 @@ class FileCheckSensor(BaseSensorOperator):
 
 class AirtableOperator(BaseOperator):
     @apply_defaults
-    def __init__(self, air_table: str, filename: str, env_path=Path('.') / '.env',   *args, **kwargs):
+    def __init__(self, air_table: str,
+                 filename: str,
+                 env_path=Path('.') / '.env',
+                 *args, **kwargs):
         super().__init__(*args, **kwargs)
         load_dotenv(dotenv_path=env_path)
         self.api_key = os.getenv("AIR_TABLE_API_KEY")
@@ -96,6 +98,7 @@ class AirtableOperator(BaseOperator):
                             api_key=self.api_key)
         records = airtable.get_all()
         airtable.insert({key: str(data_set[key]) for key in data_set})
+        os.remove(self.filename)
 
 
 default_args = {
