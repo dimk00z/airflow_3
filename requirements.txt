@@ -11,3 +11,4 @@ pyTelegramBotAPI==3.7.1
 python-dotenv==0.13.0
 airtable-python-wrapper==0.13.0
 apache-airflow==1.10.10
+PySocks==1.7.1
