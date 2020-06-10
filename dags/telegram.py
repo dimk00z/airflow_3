@@ -1,4 +1,3 @@
-# from telegram import Updater, CommandHandler
 import telebot
 import json
 import os
