@@ -2,7 +2,7 @@
 
 ## Challenge 3
 
-Написан код [telegram_listerner.py](https://github.com/dimk00z/airflow_3/blob/master/dags/telegram_listerner.py) содержащий ДАГ и три самописных оператора.
+Написан код [telegram_listerner.py](https://github.com/dimk00z/airflow_3/blob/master/dags/telegram_listener.py) содержащий ДАГ и три самописных оператора.
 Для корректной работы необходимо наличие `.env` файла, содержащего себе следующие значения:
 
 ```
