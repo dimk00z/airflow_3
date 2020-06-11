@@ -17,7 +17,6 @@ from airflow.operators.dummy_operator import DummyOperator
 class TelegramOperator(BaseOperator):
     @apply_defaults
     def __init__(self, filename: str,
-                 chat_id_for_send: str,
                  use_proxy=True,
                  env_path=Path('.') / '.env',
                  *args, **kwargs):
@@ -26,7 +25,7 @@ class TelegramOperator(BaseOperator):
         self.token = os.getenv("TELEGRAM_BOT_TOKEN")
         self.filename = filename
         self.use_proxy = use_proxy
-        self.chat_id_for_send = chat_id_for_send
+        self.chat_id_for_send = os.getenv("TELEGRAM_CHAT_ID")
         if use_proxy:
             self.proxy = os.getenv("TELEGRAM_PROXY")
 
@@ -40,7 +39,7 @@ class TelegramOperator(BaseOperator):
         def callback_inline(call):
             if call.message:
                 if call.data == "test":
-                    new_message = "Спасибо! Ваш голос 2020 принят!"
+                    new_message = "Спасибо! Ваш голос принят!"
                     bot.edit_message_text(
                         chat_id=call.message.chat.id,
                         message_id=call.message.message_id,
@@ -51,7 +50,7 @@ class TelegramOperator(BaseOperator):
                         'triggered_at': datetime.fromtimestamp(
                             int(call.message.date)).strftime("%Y-%m-%dT%H:%M:%SZ"),
                         'reporter_name': 'dimk_smith',
-                        'event_type': call.from_user.__str__()
+                        'event_type': 'trigger_button'
                     }
                     with open(self.filename, 'w', encoding='utf-8') as outfile:
                         json.dump(result_data_set, outfile)
@@ -79,7 +78,7 @@ class FileCheckSensor(BaseSensorOperator):
 
 class AirtableOperator(BaseOperator):
     @apply_defaults
-    def __init__(self, air_table: str,
+    def __init__(self,
                  filename: str,
                  env_path=Path('.') / '.env',
                  *args, **kwargs):
@@ -87,7 +86,7 @@ class AirtableOperator(BaseOperator):
         load_dotenv(dotenv_path=env_path)
         self.api_key = os.getenv("AIR_TABLE_API_KEY")
         self.base_key = os.getenv("AIR_TABLE_BASE_KEY")
-        self.air_table = air_table
+        self.air_table = os.getenv("AIR_TABLE_NAME")
         self.filename = filename
 
     def execute(self, *args, **kwargs):
@@ -95,7 +94,6 @@ class AirtableOperator(BaseOperator):
             data_set = json.load(f)
         airtable = Airtable(self.base_key, self.air_table,
                             api_key=self.api_key)
-        records = airtable.get_all()
         airtable.insert({key: str(data_set[key]) for key in data_set})
         os.remove(self.filename)
 
@@ -103,15 +101,7 @@ class AirtableOperator(BaseOperator):
 default_args = {
     'owner': 'Dimk_smith',
     'start_date': days_ago(2),
-    # test
-    'chat_id_for_send': '150399599',
-    'air_table': 'air_table',
-
-    # prod
-    # 'chat_id_for_send': '-496351002',
-    # 'air_table': 'tg_actions',
     # 'env_path': '/home/dimk/airflow/.env',
-
     'filename': '/tmp/temp.json'}
 
 dag = DAG(dag_id='telegram_listener',
